@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Just a random Question</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background: wheat;
+      padding-top: 50px;
+    }
+    button {
+      padding: 15px 30px;
+      margin: 20px;
+      font-size: 20px;
+      cursor: pointer;
+      background-color: darkred;
+      border-radius: 10px;
+      font-weight: bolder;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+      color: #fff;
+    }
+    video {
+      margin-top: 30px;
+      max-width: 90%;
+      border-radius: 10px;
+      margin-bottom: 20px;
+    }
+    h1 {
+      font-size: 30px;
+      font-weight: bold;
+    }
+    .project {
+      border: 1px solid #910d0d;
+      padding: 20px;
+      margin-bottom: 40px;
+      box-shadow: 0 0 15px rgb(126, 9, 9);
+      border-radius: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="project">
+    <h1>Mahal mo parin siya?</h1>
+    <button onclick="playVideo('oo')">Oo</button>
+    <button onclick="playVideo('hindi')">Hindi</button>
+    <p id="demo"></p>
+
+    <div id="videoContainer" style="display: none;">
+      <video id="videoPlayer" controls autoplay playsinline>
+        <source id="videoSource" src="" type="video/mp4" />
+        Your browser does not support the video tag.
+      </video>
+    </div>
+  </div>
+
+  <script>
+    function playVideo(answer) {
+      const videoContainer = document.getElementById('videoContainer');
+      const videoPlayer = document.getElementById('videoPlayer');
+      const videoSource = document.getElementById('videoSource');
+
+      // Use your actual video files:
+      const ooVideo = "kung.mp4";
+      const hindiVideo = "Dat.mp4";
+
+      if (answer === "oo") {
+        videoSource.src = ooVideo;
+        document.getElementById("demo").innerText = "Kung tayo talagaaaaaa";
+      } else {
+        videoSource.src = hindiVideo;
+        document.getElementById("demo").innerText = "Uy! What if lang yan wag delulu";
+      }
+
+      videoPlayer.load();
+      videoContainer.style.display = "block";
+      videoPlayer.play().catch(function(error) {
+        console.log("Autoplay blocked. User interaction required.");
+      });
+    }
+  </script>
+</body>
+</html>
