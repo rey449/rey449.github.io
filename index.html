@@ -2,83 +2,97 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Survey Quistionare </title>
+  <title>Click Me to Play Video</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      text-align: center;
-      background: wheat;
-      padding-top: 50px;
-    }
-    button {
-      padding: 15px 30px;
-      margin: 20px;
-      font-size: 20px;
-      cursor: pointer;
-      background-color: darkred;
-      border-radius: 10px;
-      font-weight: bolder;
-      box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+      margin: 0;
+      background: #111;
       color: #fff;
-    }
-    video {
-      margin-top: 30px;
-      max-width: 90%;
-      border-radius: 10px;
-      margin-bottom: 20px;
-    }
-    h1 {
-      font-size: 30px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      flex-direction: column;
+      font-family: 'Segoe UI', sans-serif;
       font-weight: bold;
     }
-    .project {
-      border: 1px solid #910d0d;
-      padding: 20px;
-      margin-bottom: 40px;
-      box-shadow: 0 0 15px rgb(126, 9, 9);
+
+    #playButton {
+      background: #00bcd4;
+      border: none;
+      padding: 20px 40px;
+      font-size: 24px;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    #playButton:hover {
+      background: #0097a7;
+    }
+
+    #videoContainer {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    video {
+      max-width: 90%;
+      border: 5px solid #00bcd4;
+      border-radius: 20px;
+      margin-top: 20px;
+    }
+
+    #subtitle {
+      margin-top: 20px;
+      font-size: 24px;
+      text-align: center;
+      background: rgba(0, 188, 212, 0.2);
+      padding: 10px 20px;
       border-radius: 10px;
     }
   </style>
 </head>
 <body>
-  <div class="project">
-    <h1>Mahal mo parin siya?</h1>
-    <button onclick="playVideo('oo')">Oo</button>
-    <button onclick="playVideo('hindi')">Hindi</button>
-    <p id="demo"></p>
 
-    <div id="videoContainer" style="display: none;">
-      <video id="videoPlayer" controls autoplay playsinline>
-        <source id="videoSource" src="" type="video/mp4" />
-        Your browser does not support the video tag.
-      </video>
-    </div>
+  <button id="playButton">Click Me</button>
+
+  <div id="videoContainer">
+    <video id="video" controls>
+      <source src="wala.mp4" type="video/mp4">
+      Your browser does not support HTML5 video.
+    </video>
+    <div id="subtitle"></div>
   </div>
 
   <script>
-    function playVideo(answer) {
-      const videoContainer = document.getElementById('videoContainer');
-      const videoPlayer = document.getElementById('videoPlayer');
-      const videoSource = document.getElementById('videoSource');
+    const playButton = document.getElementById('playButton');
+    const videoContainer = document.getElementById('videoContainer');
+    const video = document.getElementById('video');
+    const subtitle = document.getElementById('subtitle');
 
-      // Use your actual video files:
-      const ooVideo = "kung.mp4";
-      const hindiVideo = "Dat.mp4";
+    const captions = [
+      { start: 0, end: 2, text: "Uyy!!" },
+      { start: 2, end: 4, text: "Miss mo?" },
+      { start: 4, end: 6, text: "wala ka namang karapatan e" },
+      { start: 6, end: 7, text: "heh.." },
+      { start: 7, end: 8, text: "sabay na mimis mo!" },
+      { start: 8, end: 11, text: "walang ganon uyy" },
+    ];
 
-      if (answer === "oo") {
-        videoSource.src = ooVideo;
-        document.getElementById("demo").innerText = "Kung tayo talagaaaaaa";
-      } else {
-        videoSource.src = hindiVideo;
-        document.getElementById("demo").innerText = "Uy! What if lang yan France wag delulu";
-      }
+    playButton.addEventListener('click', () => {
+      playButton.style.display = 'none';
+      videoContainer.style.display = 'flex';
+      video.play();
+    });
 
-      videoPlayer.load();
-      videoContainer.style.display = "block";
-      videoPlayer.play().catch(function(error) {
-        console.log("Autoplay blocked. User interaction required.");
-      });
-    }
+    video.addEventListener('timeupdate', () => {
+      const currentTime = video.currentTime;
+      const currentCaption = captions.find(c => currentTime >= c.start && currentTime <= c.end);
+      subtitle.textContent = currentCaption ? currentCaption.text : '';
+    });
   </script>
+
 </body>
 </html>
