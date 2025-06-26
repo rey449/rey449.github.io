@@ -1,97 +1,172 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Click Me to Play Video</title>
+  <meta charset="UTF-8">
+  <title>Quiz Time</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap" rel="stylesheet">
   <style>
     body {
+      font-family: 'Poppins', sans-serif;
       margin: 0;
-      background: #111;
-      color: #fff;
+      padding: 20px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      text-align: center;
+      min-height: 100vh;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 30px;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .questions {
+      margin: 30px auto;
+      max-width: 600px;
+      background: rgba(255, 255, 255, 0.1);
+      padding: 30px;
+      border-radius: 15px;
+      backdrop-filter: blur(5px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .question-item {
+      margin: 15px 0;
+      position: relative;
+    }
+
+    input[type="radio"] {
+      display: none;
+    }
+
+    label {
+      display: block;
+      padding: 15px 20px;
+      margin: 10px 0;
+      font-size: 1.3rem;
+      cursor: pointer;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.1);
+      transition: all 0.3s ease;
+      border-left: 4px solid transparent;
+    }
+
+    label:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: translateX(5px);
+    }
+
+    input[type="radio"]:checked + label {
+      background: rgba(255, 255, 255, 0.3);
+      border-left: 4px solid #fff;
+      font-weight: 700;
+    }
+
+    .video-container {
+      margin: 30px auto;
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 100vh;
-      flex-direction: column;
-      font-family: 'Segoe UI', sans-serif;
-      font-weight: bold;
-    }
-
-    #playButton {
-      background: #00bcd4;
-      border: none;
-      padding: 20px 40px;
-      font-size: 24px;
-      border-radius: 50px;
-      cursor: pointer;
-      transition: 0.3s;
-    }
-
-    #playButton:hover {
-      background: #0097a7;
-    }
-
-    #videoContainer {
-      display: none;
-      flex-direction: column;
-      align-items: center;
+      min-height: 300px;
+      max-width: 800px;
     }
 
     video {
-      max-width: 90%;
-      border: 5px solid #00bcd4;
-      border-radius: 20px;
-      margin-top: 20px;
+      width: 100%;
+      max-height: 450px;
+      border: none;
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+      opacity: 0;
+      transform: scale(0.95);
+      transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
 
-    #subtitle {
-      margin-top: 20px;
-      font-size: 24px;
-      text-align: center;
-      background: rgba(0, 188, 212, 0.2);
-      padding: 10px 20px;
-      border-radius: 10px;
+    video.show {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .pulse {
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0 0 rgba(255,255,255,0.4); }
+      70% { box-shadow: 0 0 0 15px rgba(255,255,255,0); }
+      100% { box-shadow: 0 0 0 0 rgba(255,255,255,0); }
     }
   </style>
 </head>
 <body>
 
-  <button id="playButton">Click Me</button>
+  <h1>Quiz Time!</h1>
 
-  <div id="videoContainer">
-    <video id="video" controls>
-      <source src="wala.mp4" type="video/mp4">
-      Your browser does not support HTML5 video.
-    </video>
-    <div id="subtitle"></div>
+  <div class="questions">
+    <div class="question-item">
+      <input type="radio" name="quiz" id="q1" onclick="playVideo('Q1.mp4')">
+      <label for="q1">Question 1</label>
+    </div>
+    
+    <div class="question-item">
+      <input type="radio" name="quiz" id="q2" onclick="playVideo('Q2.mp4')">
+      <label for="q2">Question 2</label>
+    </div>
+    
+    <div class="question-item">
+      <input type="radio" name="quiz" id="q3" onclick="playVideo('Q3.mp4')">
+      <label for="q3">Question 3</label>
+    </div>
+  </div>
+
+  <div class="video-container" id="videoContainer">
+    <div class="pulse">Select a question to get your daily Quiz</div>
   </div>
 
   <script>
-    const playButton = document.getElementById('playButton');
-    const videoContainer = document.getElementById('videoContainer');
-    const video = document.getElementById('video');
-    const subtitle = document.getElementById('subtitle');
+    function playVideo(src) {
+      const container = document.getElementById('videoContainer');
 
-    const captions = [
-      { start: 0, end: 2, text: "Uyy!!" },
-      { start: 2, end: 4, text: "Miss mo?" },
-      { start: 4, end: 6, text: "wala ka namang karapatan e" },
-      { start: 6, end: 7, text: "heh.." },
-      { start: 7, end: 8, text: "sabay na mimis mo!" },
-      { start: 8, end: 11, text: "walang ganon uyy" },
-    ];
+      // Replace the pulse with video element
+      container.innerHTML = `
+        <video id="quizVideo" class="show" autoplay playsinline controls>
+          <source src="${src}" type="video/mp4">
+          Your browser does not support the video tag.
+        </video>
+      `;
 
-    playButton.addEventListener('click', () => {
-      playButton.style.display = 'none';
-      videoContainer.style.display = 'flex';
-      video.play();
-    });
+      // Wait a bit to ensure video tag is in the DOM
+      setTimeout(() => {
+        const video = document.getElementById('quizVideo');
 
-    video.addEventListener('timeupdate', () => {
-      const currentTime = video.currentTime;
-      const currentCaption = captions.find(c => currentTime >= c.start && currentTime <= c.end);
-      subtitle.textContent = currentCaption ? currentCaption.text : '';
-    });
+        // Try to force play with sound
+        const playPromise = video.play();
+        if (playPromise !== undefined) {
+          playPromise
+            .then(() => {
+              console.log("Video playing with sound");
+            })
+            .catch((error) => {
+              console.error("Video autoplay failed:", error);
+              alert("Please click the play button if the video doesn't start automatically.");
+            });
+        }
+
+        // Entrance animation
+        video.style.transform = 'rotate(1deg)';
+        setTimeout(() => {
+          video.style.transform = 'rotate(-1deg)';
+          setTimeout(() => {
+            video.style.transform = 'rotate(0)';
+          }, 100);
+        }, 100);
+      }, 100);
+    }
   </script>
 
 </body>
